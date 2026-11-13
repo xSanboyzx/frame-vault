@@ -1,0 +1,33 @@
+{
+  "name": "frame-vault",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=22.12.0 <23"
+  },
+  "packageManager": "npm@10.9.2",
+  "scripts": {
+    "setup": "node scripts/tasks.mjs setup",
+    "doctor": "node scripts/tasks.mjs doctor",
+    "dev": "node scripts/tasks.mjs dev",
+    "dev:web": "npm run dev --workspace @frame-vault/frontend",
+    "build:web": "npm run build --workspace @frame-vault/frontend",
+    "check": "node scripts/tasks.mjs check",
+    "format": "node scripts/tasks.mjs format",
+    "format:check": "node scripts/tasks.mjs format-check",
+    "engine:bundle": "node scripts/tasks.mjs bundle",
+    "build": "node scripts/tasks.mjs build",
+    "smoke:engine": "node scripts/tasks.mjs smoke",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.4",
+    "prettier": "3.10.1"
+  },
+  "overrides": {
+    "minimatch": "11.0.1"
+  }
+}

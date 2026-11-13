@@ -1,0 +1,45 @@
+name: Windows foundation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-and-package:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.1
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13.1
+      - name: Install pinned tools
+        run: |
+          python -m pip install uv==0.9.9
+          rustup toolchain install 1.91.1 --profile minimal --component rustfmt --component clippy
+      - name: Setup
+        run: npm run setup
+      - name: Check
+        run: npm run check
+      - name: Build installer
+        run: npm run build
+      - name: Test bundled worker
+        run: npm run smoke:engine
+      - name: Test installer lifecycle
+        shell: pwsh
+        run: ./scripts/smoke-installer.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frame-vault-windows-x64
+          path: src-tauri/target/release/bundle/nsis/*-setup.exe
+          if-no-files-found: error
+          retention-days: 14
